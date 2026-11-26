@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A Shopify test purchase can target a different Google Ads conversion action. Learn to compare the exact transaction ID and full send_to value using one worked example.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <link rel="canonical" href="https://shopify-purchase-event-check.vercel.app/guide">
+  <meta name="google-site-verification" content="kM9QiBhI1kFyyCB6lmAbWm0JtLeN4Z3wiHImmOe0xfE">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Which Google Ads action did this Shopify purchase target?">
+  <meta property="og:description" content="Compare the intended conversion action with the one in a captured event for the same Shopify test order.">
+  <meta property="og:url" content="https://shopify-purchase-event-check.vercel.app/guide">
+  <meta property="og:image" content="https://shopify-purchase-event-check.vercel.app/guide-assets/wrong-google-ads-action.png">
+  <title>Which Google Ads action did this Shopify purchase target?</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="wrap masthead"><a href="./" class="brand"><span aria-hidden="true">✓</span> Purchase Event Check</a><a href="./">Open checker</a></header>
+  <main class="wrap article-wrap">
+    <article class="guide">
+      <header class="intro">
+        <h1>Which Google Ads action did this Shopify purchase target?</h1>
+        <p>Follow one Shopify test order and match its transaction ID to the full Google Ads destination. A tag can fire for a different action even when the one you expected has no matching record in your capture.</p>
+      </header>
+      <section>
+        <h2>1. Find the intended action</h2>
+        <p>In Google Ads, open the purchase conversion action you intend to verify. Where its tag setup shows an event snippet, record the full <code>send_to</code> value, including the conversion ID and the label after the slash. If the destination value is unavailable, mark it as unknown and confirm it with the integration owner before comparing. <a href="https://developers.google.com/tag-platform/devguides/conversions#measure_conversions_with_google_ads">Google tag setup</a></p>
+      </section>
+      <section>
+        <h2>2. Inspect one captured event</h2>
+        <p>Use a test order you are authorized to run. Inspect a capture from that same checkout, for example in Tag Assistant where the Google tag is visible, or in the logs from the integration that sends the event. Shopify Pixel Helper can show which custom-pixel events ran in Shopify. For this check, look for the outgoing Ads conversion event. <a href="https://support.google.com/tagassistant/answer/10039345?hl=en">Google Tag Assistant</a> · <a href="https://help.shopify.com/en/manual/promoting-marketing/pixels/custom-pixels/testing">Shopify Pixel Helper</a></p>
+        <p>Record the exact <code>transaction_id</code> from the test implementation, which may differ from the order number displayed in Shopify. If you also compare value and currency, confirm that both values use the same treatment of tax and shipping. Keep customer details, account credentials, cookies and complete logs out of any shared example. <a href="https://support.google.com/google-ads/answer/6386790?hl=en">Google Ads transaction IDs</a></p>
+      </section>
+      <section>
+        <h2>3. Compare the transaction and destination</h2>
+        <p>In this synthetic test the intended destination is <code>AW-123456/purchase-main</code>. The captured event for that same test transaction goes to <code>AW-123456/purchase-test</code>.</p>
+        <pre><code>{
+  "send_to": "AW-123456/purchase-test",
+  "transaction_id": "DEMO-1001",
+  "value": 45,
+  "currency": "USD"
+}</code></pre>
+        <p>The conversion ID matches and the label differs. The capture contains one record for the test transaction under another action and zero matching records under the intended action. The next step is to inspect which integration supplied that label and whether the other action is intentional. If both actions receive the same transaction, inspect their roles separately. Google’s transaction-ID duplicate handling applies within a conversion action. <a href="https://support.google.com/google-ads/answer/6386790?hl=en">Google Ads duplicate handling</a></p>
+        <figure>
+          <img src="guide-assets/wrong-google-ads-action.png" width="740" height="820" alt="Synthetic checker report shows the same order under a different Google Ads action and one record under other actions." loading="lazy">
+          <figcaption>The built-in synthetic example shows how the checker reports a different action.</figcaption>
+        </figure>
+      </section>
+      <section class="guide-try">
+        <h2>Try this comparison</h2>
+        <p>Open the free checker, select <strong>Wrong Google Ads action</strong>, and click <strong>Load example</strong>. The captured fields stay in your browser. Verify Google Ads acceptance, reporting and attribution separately in Google Ads.</p>
+        <p><a class="guide-button" href="./">Open Shopify Purchase Event Check</a></p>
+      </section>
+      <section class="guide-try service-cta">
+        <h2>Need a fixed-scope human check?</h2>
+        <p>If your Google Ads or GA4 purchase conversion is missing, duplicated, or firing to the wrong action, book a 1-checkout written diagnostic (2 business days, no store password required).</p>
+        <div class="cta-actions">
+          <a class="guide-button" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=star119055%40gmail.com&item_name=Shopify%20Purchase%20Event%20Diagnostic&amount=49.00&currency_code=USD" target="_blank" rel="noopener noreferrer">Book written diagnostic — US$49 (PayPal)</a>
+          <a class="cta-secondary" href="mailto:wadeelric34@gmail.com?subject=Shopify%20Purchase%20Event%20Diagnostic">Email redacted payload</a>
+        </div>
+      </section>
+    </article>
+  </main>
+  <footer class="wrap foot"><p>This test was run with the checker’s synthetic example. The example and checker are published by the same project.</p></footer>
+</body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://belegvio-erechnung-check.vercel.app/sitemap.xml

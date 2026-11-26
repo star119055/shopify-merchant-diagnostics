@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="How to diagnose and fix Google Merchant Center 'mismatched currency in shipping information' errors for Shopify Markets multi-currency stores without guessing.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <link rel="canonical" href="https://gmc-shipping-check.vercel.app/guide">
+  <meta name="google-site-verification" content="kM9QiBhI1kFyyCB6lmAbWm0JtLeN4Z3wiHImmOe0xfE">
+  <title>Fix GMC Mismatched Currency in Shipping Information on Shopify</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="brand" href="./"><span class="brand-icon" aria-hidden="true">↔</span> Merchant Center Shipping Check</a>
+    <a class="quiet-link" href="./">Open checker</a>
+  </header>
+  <main class="wrap">
+    <article class="card" style="padding: 24px 26px; margin-top: 20px;">
+      <h1>How to fix "Mismatched currency in shipping information" on Shopify</h1>
+      <p style="margin-top: 10px; color: var(--text); line-height: 1.6;">When Shopify Markets or a multi-currency feed app sends a product price in one currency (for example, USD for the US) while Merchant Center reads a shipping service in your store's base currency (for example, AUD, CAD, EUR, or GBP), Google flags <strong>Mismatched currency in shipping information</strong> and disapproves or limits the product.</p>
+
+      <h2 style="margin-top: 22px;">1. Check whether shipping comes from the offer or the account</h2>
+      <p style="margin-top: 8px; color: var(--text); line-height: 1.6;">Open the affected product in Google Merchant Center under <strong>Products</strong> and inspect the final processed attributes. If an item-level <code>shipping</code> attribute is present, it overrides account-level shipping settings for that country. Check which data source (such as the Google &amp; YouTube app, a supplemental feed, or a third-party feed app) wrote the currency.</p>
+
+      <h2 style="margin-top: 22px;">2. Compare against live Shopify checkout for the same country</h2>
+      <p style="margin-top: 8px; color: var(--text); line-height: 1.6;">Open the exact product variant in a private browser window, switch to the target country, enter a valid postal code (e.g. ZIP 10001 for US), and read the exact shipping currency and amount at checkout. Never compare a default store-currency cart against a target-country Merchant Center offer.</p>
+
+      <h2 style="margin-top: 22px;">3. Isolate one offer before editing account-wide shipping</h2>
+      <p style="margin-top: 8px; color: var(--text); line-height: 1.6;">Use the free browser checker to compare one disapproved offer against checkout and record the current data source before making changes. Once you fix the single writer causing the currency mismatch, wait for the next scheduled feed sync and verify the processed offer in Merchant Center.</p>
+
+      <div class="report-actions" style="margin-top: 18px;">
+        <a class="primary cta-link" href="./">Run free shipping currency check</a>
+      </div>
+    </article>
+
+    <section class="card service-cta" aria-labelledby="service-heading">
+      <div class="card-head">
+        <h2 id="service-heading">Need a fixed-scope human check?</h2>
+      </div>
+      <div class="service-body">
+        <p>Still seeing disapprovals after editing shipping or syncing Shopify Markets? Book a 1-offer, 1-country written diagnostic (2 business days, no store password required). You receive the exact conflicting config, safe single fix, rollback value, and post-sync verification steps.</p>
+        <div class="report-actions">
+          <a class="primary cta-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=star119055%40gmail.com&item_name=Shopify%20GMC%20Shipping%20Currency%20Diagnostic&amount=49.00&currency_code=USD" target="_blank" rel="noopener noreferrer">Book written diagnostic — US$49 (PayPal)</a>
+          <a class="secondary cta-link" href="mailto:wadeelric34@gmail.com?subject=GMC%20Shipping%20Currency%20Diagnostic">Email redacted screenshots</a>
+        </div>
+        <p class="field-help">After payment, send your redacted Merchant Center error screenshot and product URL to <code>wadeelric34@gmail.com</code>.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="wrap site-footer">
+    <p>Independent diagnostic guide for Shopify and Google Merchant Center.</p>
+    <nav><a href="./">Checker</a></nav>
+  </footer>
+</body>
+</html>

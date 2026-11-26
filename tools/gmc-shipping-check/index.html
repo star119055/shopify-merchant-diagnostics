@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Check a Google Merchant Center shipping currency mismatch for one Shopify offer and country. Compare Merchant Center evidence with checkout and save a local report.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://gmc-shipping-check.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Shopify Merchant Center Shipping Currency Mismatch Checker">
+  <meta property="og:description" content="Check a Google Merchant Center shipping currency mismatch for one Shopify offer and country. Compare Merchant Center evidence with checkout.">
+  <meta property="og:url" content="https://gmc-shipping-check.vercel.app/">
+  <meta name="google-site-verification" content="kM9QiBhI1kFyyCB6lmAbWm0JtLeN4Z3wiHImmOe0xfE">
+  <title>Merchant Center Shipping Currency Check</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="brand" href="./"><span class="brand-icon" aria-hidden="true">↔</span> Merchant Center Shipping Check</a>
+    <a class="quiet-link" href="#references">Google references</a>
+  </header>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="title">
+      <h1 id="title">Shipping currency check</h1>
+      <p>Compare Merchant Center and Shopify checkout for one offer and destination. All case data stays in this browser tab. <a href="guide">Read the step-by-step fix guide</a>.</p>
+    </section>
+    <div class="sample-bar">
+      <label for="sample">Try a synthetic example</label>
+      <select id="sample">
+        <option value="mismatch">USD product, AUD shipping</option>
+        <option value="zero">Matching zero-cost shipping</option>
+        <option value="country">Shipping policy for another country</option>
+        <option value="sync">Different data source after sync</option>
+      </select>
+      <button class="secondary" type="button" id="load-sample">Load example</button>
+    </div>
+    <p class="sample-notice" id="sample-notice" hidden></p>
+    <noscript><p class="notice">Enable JavaScript to run the comparison in your browser.</p></noscript>
+    <div class="workspace">
+      <form id="evidence" class="card" autocomplete="off">
+        <div class="card-head">
+          <h2>Case evidence</h2>
+          <button class="text-button" type="reset">Clear</button>
+        </div>
+        <fieldset>
+          <legend>Current offer</legend>
+          <p class="field-help">In Merchant Center, open the affected item under Products. Copy its offer ID and target country. Use a two-letter country code such as US.</p>
+          <div class="fields">
+            <label>Offer ID<input name="offer" required maxlength="120" placeholder="demo-001" spellcheck="false"></label>
+            <label>Target country code<input name="country" required minlength="2" maxlength="2" pattern="[A-Za-z]{2}" title="Enter a two-letter country code" placeholder="US" class="code" spellcheck="false"></label>
+            <label>Delivery conditions<input name="region" maxlength="160" placeholder="ZIP 10001, standard, 1 item"></label>
+            <label>Merchant Center status <span class="optional">optional</span><select name="currentStatus">
+              <option value="">Unknown</option><option>Limited</option><option>Disapproved</option><option>Approved</option><option>Pending</option><option>Under review</option>
+            </select></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Merchant Center values</legend>
+          <p class="field-help">Use the price shown for this item. Enter amounts with a decimal point and three-letter currencies, for example 50.00 and USD. Enter 0 for free shipping.</p>
+          <div class="fields money">
+            <label>Product price<input name="productAmount" inputmode="decimal" maxlength="24" placeholder="50.00"></label>
+            <label>Product currency<input name="productCurrency" maxlength="3" placeholder="USD" class="code" spellcheck="false"></label>
+            <label>Shipping amount<input name="shippingAmount" inputmode="decimal" maxlength="24" placeholder="8.00"></label>
+            <label>Shipping currency<input name="shippingCurrency" maxlength="3" placeholder="AUD" class="code" spellcheck="false"></label>
+          </div>
+          <div class="fields applicability">
+            <label>Shipping evidence source<select name="shippingSource"><option value="unknown">Unknown</option><option value="offer">Offer-level shipping price</option><option value="account">Account shipping service</option></select></label>
+            <label>Does this rate apply?<select name="shippingScope"><option value="unknown">Applicability unknown</option><option value="same">Confirmed for this case</option><option value="different">Different offer or conditions</option></select></label>
+          </div>
+          <p class="field-help">Check shipping on the item or in Shipping and returns. Confirm applicability only when the rate covers this offer, country and delivery conditions.</p>
+        </fieldset>
+        <fieldset>
+          <legend>Shopify checkout</legend>
+          <p class="field-help">Before placing the order, record the shipping price at checkout for the same variant, destination, service and cart conditions.</p>
+          <div class="fields money">
+            <label>Shipping amount<input name="checkoutAmount" inputmode="decimal" maxlength="24" placeholder="8.00"></label>
+            <label>Checkout currency<input name="checkoutCurrency" maxlength="3" placeholder="USD" class="code" spellcheck="false"></label>
+          </div>
+          <label class="checkout-scope">Checkout conditions<select name="checkoutScope"><option value="unknown">Comparison conditions unknown</option><option value="same">Same offer, country and conditions</option><option value="different">Different offer or conditions</option></select></label>
+        </fieldset>
+        <details id="previous" class="previous">
+          <summary>Compare with an earlier status <span class="optional">optional</span></summary>
+          <p class="field-help">For a history comparison, record the current data source and time and enter an earlier observation in the same time zone. The offer ID, country, source and delivery conditions must match.</p>
+          <div class="fields">
+            <label>Current data source<input name="source" maxlength="120" placeholder="Google &amp; YouTube"></label>
+            <label>Current observation time<input type="datetime-local" name="observedAt"></label>
+            <label>Earlier offer ID<input name="previousOffer" maxlength="120" spellcheck="false"></label>
+            <label>Earlier country code<input name="previousCountry" maxlength="2" class="code" spellcheck="false"></label>
+            <label>Earlier data source<input name="previousSource" maxlength="120"></label>
+            <label>Earlier delivery conditions<input name="previousRegion" maxlength="160"></label>
+            <label>Earlier observation time<input type="datetime-local" name="previousObservedAt"></label>
+            <label>Earlier status<select name="previousStatus"><option value="">Unknown</option><option>Limited</option><option>Disapproved</option><option>Approved</option><option>Pending</option><option>Under review</option></select></label>
+          </div>
+        </details>
+        <div class="form-actions"><button class="primary" type="submit">Compare evidence</button><p class="field-help" id="scope-feedback" role="status" hidden></p></div>
+      </form>
+      <section class="card result-card" id="result" aria-labelledby="result-heading">
+        <div class="card-head report-head"><h2 id="result-heading" tabindex="-1">Comparison report</h2><a href="#evidence" id="edit-evidence" hidden>Edit evidence</a></div>
+        <div id="empty" class="empty">
+          <span class="empty-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+          <h3>Ready to compare</h3>
+          <p>Enter a case or load an example to see the currency comparison and next checks.</p>
+        </div>
+        <div id="report" hidden>
+          <p class="sample-notice" id="report-provenance" hidden></p>
+          <div id="outcome" class="outcome" role="status"></div>
+          <dl id="comparison" class="comparison"></dl>
+          <section class="report-section" id="gap-section" hidden><h3>Evidence to confirm</h3><ul id="gaps"></ul></section>
+          <section class="report-section"><h3>Status history</h3><div id="sync" class="sync"></div></section>
+          <section class="report-section"><h3>Next checks</h3><ol id="steps"></ol></section>
+          <div class="report-actions"><button type="button" class="primary" id="download">Download report</button><button type="button" class="secondary" id="copy">Copy report</button></div>
+          <p id="feedback" class="field-help" role="status" hidden></p>
+        </div>
+      </section>
+    </div>
+    <section class="card service-cta" aria-labelledby="service-heading">
+      <div class="card-head">
+        <h2 id="service-heading">Need a fixed-scope human check?</h2>
+      </div>
+      <div class="service-body">
+        <p>If your Merchant Center shipping currency mismatch persists across syncs or affects a live Shopping market, book a 1-offer, 1-country written diagnostic (2 business days, no store password required).</p>
+        <div class="report-actions">
+          <a class="primary cta-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=star119055%40gmail.com&item_name=Shopify%20GMC%20Shipping%20Currency%20Diagnostic&amount=49.00&currency_code=USD" target="_blank" rel="noopener noreferrer">Book written diagnostic — US$49 (PayPal)</a>
+          <a class="secondary cta-link" href="mailto:wadeelric34@gmail.com?subject=GMC%20Shipping%20Currency%20Diagnostic">Email redacted screenshots</a>
+        </div>
+        <p class="field-help">After payment, send your redacted Merchant Center error screenshot and product URL to <code>wadeelric34@gmail.com</code>.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="wrap site-footer" id="references">
+    <p>Independent diagnostic tool. Merchant Center remains the source for current product eligibility.</p>
+    <nav aria-label="Google reference documentation">
+      <a href="https://support.google.com/merchants/answer/15075344?hl=en" target="_blank" rel="noopener noreferrer">Currency requirements</a>
+      <a href="https://support.google.com/merchants/answer/6324484?hl=en" target="_blank" rel="noopener noreferrer">Shipping attribute</a>
+      <a href="https://support.google.com/merchants/answer/14232591?hl=en" target="_blank" rel="noopener noreferrer">Shopify shipping setup</a>
+    </nav>
+  </footer>
+</body>
+</html>

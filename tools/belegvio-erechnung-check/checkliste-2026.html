@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Shopify E-Rechnung Pflicht 2025/2026 für deutsche B2B-Händler: ZUGFeRD 2.3 (EN 16931), automatische Stornorechnungen (381) und DATEV EXTF Buchungsstapel (SKR03/SKR04) korrekt einrichten.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <link rel="canonical" href="https://belegvio-erechnung-check.vercel.app/checkliste-2026">
+  <meta name="google-site-verification" content="kM9QiBhI1kFyyCB6lmAbWm0JtLeN4Z3wiHImmOe0xfE">
+  <title>Shopify E-Rechnung Pflicht 2026 &amp; DATEV Export Checkliste | Belegvio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="brand" href="./"><span class="brand-icon" aria-hidden="true">§</span> Belegvio E-Rechnung Prüfer</a>
+    <nav class="top-nav"><a href="./">Zum XML-Prüfer</a></nav>
+  </header>
+  <main class="wrap">
+    <article class="card guide-article">
+      <h1>Shopify E-Rechnung Pflicht 2025/2026 &amp; DATEV Export Checkliste</h1>
+      <p>Für inländische B2B-Umsätze in Deutschland reicht eine reine PDF-Rechnung künftig nicht mehr aus. Shopify erstellt von Haus aus keine EN-16931-konformen ZUGFeRD- oder XRechnung-Dateien und keinen steuerberaterfähigen DATEV-EXTF-Buchungsstapel.</p>
+
+      <h2>1. ZUGFeRD 2.3 (PDF/A-3 + eingebettetes XML) statt reinem PDF</h2>
+      <p>Mit ZUGFeRD 2.3 (Profil EN 16931) erhalten Ihre B2B-Kunden eine lesbare PDF-Rechnung inklusive maschinenlesbarem XML. Prüfen Sie vor dem Live-Betrieb immer BT-1 (fortlaufende Rechnungsnummer), BT-2 (Datum), BT-3 (380 für Rechnung, 381 für Storno), Verkäufer-USt-IdNr. und die exakte Aufteilung zwischen 19 % und 7 % Umsatzsteuer.</p>
+
+      <h2>2. Rückerstattungen als echte Stornorechnung (TypeCode 381)</h2>
+      <p>Einer der häufigsten Fehler bei Shopify-Händlern: Teil- oder Vollrückerstattungen werden ohne fortlaufenden Stornobeleg und ohne XML-Referenz (<code>InvoiceReferencedDocument</code> / BT-25) auf die ursprüngliche Rechnungsnummer verbucht. Steuerberater lehnen solche Exporte bei der DATEV-Übernahme häufig ab.</p>
+
+      <h2>3. DATEV EXTF Buchungsstapel (SKR03 / SKR04) sauber abstimmen</h2>
+      <ul>
+        <li>Erlöskonten nach Steuersatz trennen (z. B. SKR03: 8400 für 19 %, 8300 für 7 %).</li>
+        <li>Versandkosten steuerlich konsistent zur Hauptleistung ausweisen.</li>
+        <li>Leistungsdatum / Belegdatum mit dem Steuerberater abstimmen, bevor der erste Monatsstapel festgeschrieben wird (Festschreibung = 0 für Vorab-Prüfung).</li>
+      </ul>
+
+      <div class="actions" style="margin-top: 18px;">
+        <a class="primary cta-link" href="./">E-Rechnung XML kostenlos prüfen</a>
+        <a class="secondary cta-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=star119055%40gmail.com&item_name=Shopify%20E-Rechnung%20and%20DATEV%20EXTF%20Check&amount=49.00&currency_code=USD" target="_blank" rel="noopener noreferrer">Einzel-Check buchen — US$49 (PayPal)</a>
+      </div>
+    </article>
+  </main>
+  <footer class="wrap site-footer">
+    <p>Belegvio – Shopify E-Rechnung &amp; DATEV Hilfsmittel.</p>
+    <nav><a href="./">XML-Prüfer</a></nav>
+  </footer>
+</body>
+</html>

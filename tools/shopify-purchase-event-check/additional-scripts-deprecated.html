@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Shopify deprecated Thank You page Additional Scripts. Learn how to diagnose missing or duplicate Google Ads and GA4 purchase events after migrating to Customer Events and Custom Pixels.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <link rel="canonical" href="https://shopify-purchase-event-check.vercel.app/additional-scripts-deprecated">
+  <meta name="google-site-verification" content="kM9QiBhI1kFyyCB6lmAbWm0JtLeN4Z3wiHImmOe0xfE">
+  <title>Shopify Additional Scripts Deprecated: Fix Missing or Duplicate Google Ads Purchase Tracking</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="wrap masthead"><a href="./" class="brand"><span aria-hidden="true">✓</span> Purchase Event Check</a><a href="./">Open checker</a></header>
+  <main class="wrap article-wrap">
+    <article class="guide">
+      <header class="intro">
+        <h1>Shopify Additional Scripts deprecated: fix missing or duplicate Google Ads purchase events</h1>
+        <p>When Shopify stores migrate off legacy Thank You page Additional Scripts to Checkout Extensibility and Customer Events, Google Ads and GA4 purchase tracking often breaks in one of three ways: zero events fired, duplicate conversions from overlapping apps and custom pixels, or wrong conversion value/currency.</p>
+      </header>
+      <section>
+        <h2>1. Confirm checkout_completed fires once</h2>
+        <p>Open <strong>Settings &gt; Customer events</strong> in Shopify, launch <strong>Shopify Pixel Helper</strong>, and run one authorized test order. Confirm whether <code>checkout_completed</code> fires once on the Thank You page. If it does not appear, check active custom pixel permissions and customer privacy consent rules before editing Google Ads.</p>
+      </section>
+      <section>
+        <h2>2. Check for double-counting between the Google &amp; YouTube app and Custom Pixels</h2>
+        <p>A common post-migration bug occurs when both the official <strong>Google &amp; YouTube app</strong> and a <strong>GTM Custom Pixel</strong> fire a purchase event for the same test order with different <code>transaction_id</code> formats (for example, Shopify order ID vs. order number <code>#1001</code>) or to two different <code>send_to</code> labels. Google Ads deduplicates only within the same conversion action and exact matching transaction ID.</p>
+      </section>
+      <section>
+        <h2>3. Verify value, currency, and send_to in one test checkout</h2>
+        <p>Capture the outgoing payload in Tag Assistant or GA4 DebugView and paste the redacted JSON into our free browser checker to verify exact transaction ID, currency, value basis (tax/shipping), and destination label.</p>
+        <p><a class="guide-button" href="./">Open Shopify Purchase Event Check</a></p>
+      </section>
+      <section class="guide-try service-cta">
+        <h2>Need a fixed-scope human check?</h2>
+        <p>If your Google Ads or GA4 purchase conversions dropped or doubled after upgrading Shopify checkout, book a 1-checkout written diagnostic (US$49, 2 business days, no store password required).</p>
+        <div class="cta-actions">
+          <a class="guide-button" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=star119055%40gmail.com&item_name=Shopify%20Purchase%20Event%20Diagnostic&amount=49.00&currency_code=USD" target="_blank" rel="noopener noreferrer">Book written diagnostic — US$49 (PayPal)</a>
+          <a class="cta-secondary" href="mailto:wadeelric34@gmail.com?subject=Shopify%20Purchase%20Event%20Diagnostic">Email redacted payload</a>
+        </div>
+      </section>
+    </article>
+  </main>
+  <footer class="wrap foot"><p>Independent Shopify conversion diagnostic guide.</p><nav><a href="./">Checker</a><a href="guide">Wrong Ads action guide</a></nav></footer>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Compare a Shopify test order with a GA4 purchase or Google Ads conversion payload. Check transaction ID, value, currency, and repeated captured records in your browser.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <link rel="canonical" href="https://shopify-purchase-event-check.vercel.app/">
+  <meta name="google-site-verification" content="kM9QiBhI1kFyyCB6lmAbWm0JtLeN4Z3wiHImmOe0xfE">
+  <title>Shopify Purchase Event Check</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <header class="wrap masthead"><a href="./" class="brand"><span aria-hidden="true">✓</span> Purchase Event Check</a><a class="reference" href="#references">References</a></header>
+  <main class="wrap">
+    <div class="intro">
+      <h1>Check a Shopify purchase event</h1>
+      <p>Compare one test order with a GA4 or Google Ads capture. Check the transaction ID, value, currency and repeated records. Data stays in this browser tab.</p>
+      <p class="guide-link"><a href="guide">Walk through a purchase sent to the wrong Google Ads action</a> · <a href="additional-scripts-deprecated">Shopify Additional Scripts deprecated? Fix missing Google Ads conversions</a></p>
+    </div>
+    <div class="examples">
+      <label for="sample">Synthetic example</label>
+      <select id="sample"><option value="ga4">GA4 purchase matches</option><option value="repeat">GA4 currency and repeats</option><option value="ads">Wrong Google Ads action</option><option value="basis">GA4 value basis unverified</option></select>
+      <button type="button" class="secondary" id="load">Load example</button>
+    </div>
+    <p class="session-note" id="example-state" role="status" hidden></p>
+    <details class="help-box capture-help" id="missing-purchase">
+      <summary>Can't see the purchase event?</summary>
+      <form id="capture-check">
+        <div class="fields">
+          <label>What sends the purchase?<select name="sender">
+            <option value="unknown">Not sure</option>
+            <option value="gtm">GTM as a Shopify custom pixel</option>
+            <option value="google_app">Google &amp; YouTube app for Google Ads</option>
+          </select></label>
+          <label>Did you see Shopify's <code>checkout_completed</code>?<select name="checkout">
+            <option value="unknown">I haven't verified it</option>
+            <option value="seen">I saw it for this checkout</option>
+            <option value="not_seen">I looked and didn't see it</option>
+          </select></label>
+        </div>
+        <div class="form-actions"><button type="submit" class="secondary">Get the next check</button></div>
+      </form>
+      <p class="hint"><a href="https://help.shopify.com/en/manual/promoting-marketing/pixels/custom-pixels/gtm-tutorial" target="_blank" rel="noopener noreferrer">Shopify custom pixel testing</a> · <a href="https://support.google.com/merchants/answer/17255853?hl=en" target="_blank" rel="noopener noreferrer">Google Ads tracking troubleshooting</a></p>
+    </details>
+    <div class="workspace">
+      <form id="evidence" class="card" autocomplete="off">
+        <div class="card-head"><h2>Order and event evidence</h2><button type="reset" class="text-button">Clear</button></div>
+        <div class="card-body">
+          <div class="fields">
+            <label>Destination type<select name="platform" id="platform"><option value="ga4">Google Analytics 4</option><option value="google_ads">Google Ads</option></select></label>
+            <label id="destination-field" hidden>Expected conversion action<input name="destination" id="destination" placeholder="AW-123456/example" spellcheck="false" maxlength="110"></label>
+            <label>Expected transaction ID<input name="orderId" aria-describedby="transaction-help" placeholder="DEMO-1001" spellcheck="false" maxlength="128" required></label>
+            <label>Expected value<input name="value" inputmode="decimal" maxlength="24" placeholder="45.00" required></label>
+            <label>Expected currency<input name="currency" class="code" minlength="3" maxlength="3" pattern="[A-Za-z]{3}" placeholder="USD" spellcheck="false" required></label>
+          </div>
+          <p id="basis-help" class="hint"></p>
+          <p class="hint" id="transaction-help">Use the ID your integration is expected to send for this test order. It may differ from Shopify’s displayed order number.</p>
+          <label class="check"><input name="scopeConfirmed" type="checkbox"> <span>I captured this checkout and verified the intended destination.</span></label>
+          <label class="check"><input name="usesSameValueBasis" type="checkbox"> <span>I compared values with the same tax and shipping treatment.</span></label>
+          <details class="help-box">
+            <summary>Where to find the event fields</summary>
+            <p>Inspect the test checkout’s destination event. Collect only its transaction ID, numeric value, currency and, for Ads, the observed conversion action. Replace the example values with what you actually observed.</p>
+            <h3>GA4 purchase</h3>
+            <p>In <a href="https://support.google.com/analytics/answer/7201382?hl=en" target="_blank" rel="noopener noreferrer">GA4 DebugView</a>, select the test device and open the purchase event to inspect its parameters.</p>
+            <pre id="ga4-template">{"name":"purchase","params":{"transaction_id":"DEMO-1001","value":45,"currency":"USD"}}</pre>
+            <button type="button" class="secondary copy-template" data-template="ga4-template">Copy GA4 JSON</button>
+            <h3>Google Ads conversion</h3>
+            <p>In a connected <a href="https://support.google.com/tagassistant/answer/10039345?hl=en" target="_blank" rel="noopener noreferrer">Tag Assistant</a> session, inspect the Google Ads conversion tag for the test checkout. Use the observed Ads ID and action label together in <code>send_to</code>.</p>
+            <pre id="ads-template">{"send_to":"AW-123456/example","transaction_id":"DEMO-1001","value":45,"currency":"USD"}</pre>
+            <button type="button" class="secondary copy-template" data-template="ads-template">Copy Google Ads JSON</button>
+            <p class="hint" id="template-feedback" role="status" hidden></p>
+          </details>
+          <label class="payload">Curated event JSON <textarea name="eventsText" id="events" aria-describedby="payload-help" required maxlength="120000" spellcheck="false" placeholder="Paste the purchase event's JSON fields here"></textarea></label>
+          <p id="payload-help" class="hint">Use redacted JSON. If you redact transaction IDs, preserve whether the original IDs match. Omit client IDs, email addresses, phone numbers, API secrets and cookies.</p>
+          <p class="hint">Use the event fields from the template. Full debugger exports, tag scripts and raw Shopify <code>checkout_completed</code> data have different formats.</p>
+          <div class="form-actions"><button type="submit" class="primary">Check event</button></div>
+          <p id="error" class="error" role="alert" tabindex="-1" hidden></p>
+        </div>
+      </form>
+      <section class="card" id="result" aria-labelledby="report-heading">
+        <div class="card-head report-head"><h2 id="report-heading" tabindex="-1">Comparison report</h2></div>
+        <div id="empty" class="empty"><h3>Ready to check</h3><p>Enter test evidence or load a synthetic example to see how the report works.</p></div>
+        <div id="report" class="card-body" hidden>
+          <p class="provenance" id="report-provenance"></p>
+          <div class="result-status" id="status" role="status"></div>
+          <p class="hint table-hint">Scroll the comparison sideways for all columns.</p>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Comparison details">
+            <table><thead><tr><th scope="col">Field</th><th scope="col">Expected</th><th scope="col">Observed</th></tr></thead><tbody id="rows"></tbody></table>
+          </div>
+          <ul class="notes" id="notes"></ul>
+          <button type="button" class="secondary" id="download">Download report</button>
+        </div>
+      </section>
+    </div>
+    <section class="card service-cta" aria-labelledby="service-heading">
+      <div class="card-head">
+        <h2 id="service-heading">Need a fixed-scope purchase event check?</h2>
+      </div>
+      <div class="card-body">
+        <p>If your GA4 or Google Ads purchase conversion is missing, duplicated, or firing to the wrong action, book a 1-checkout written diagnostic (2 business days, no store password required).</p>
+        <div class="cta-actions">
+          <a class="guide-button" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=star119055%40gmail.com&item_name=Shopify%20Purchase%20Event%20Diagnostic&amount=49.00&currency_code=USD" target="_blank" rel="noopener noreferrer">Book written diagnostic — US$49 (PayPal)</a>
+          <a class="cta-secondary" href="mailto:wadeelric34@gmail.com?subject=Shopify%20Purchase%20Event%20Diagnostic">Email redacted payload</a>
+        </div>
+        <p class="hint">After payment, send your redacted checkout event payload and order summary to <code>wadeelric34@gmail.com</code>.</p>
+      </div>
+    </section>
+    <noscript><p class="error">Enable JavaScript to compare evidence in your browser.</p></noscript>
+  </main>
+  <footer class="wrap foot" id="references">
+    <p>Independent tool for captured evidence. Use your destination's reporting tools to verify acceptance and attribution.</p>
+    <nav aria-label="Official documentation"><a href="https://help.shopify.com/en/manual/promoting-marketing/pixels/custom-pixels/testing" target="_blank" rel="noopener noreferrer">Shopify Pixel Helper</a><a href="https://developers.google.com/analytics/devguides/collection/protocol/ga4/reference/events#purchase" target="_blank" rel="noopener noreferrer">GA4 purchase fields</a><a href="https://support.google.com/google-ads/answer/6386790?hl=en" target="_blank" rel="noopener noreferrer">Google Ads transaction IDs</a></nav>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kostenloser Browser-Prüfer für deutsche Shopify E-Rechnungen (ZUGFeRD / XRechnung / EN 16931 XML). Prüfen Sie Pflichtfelder, 19%/7% MwSt., Stornobelege (381) und DATEV-Vorbereitung lokal im Browser.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <link rel="canonical" href="https://belegvio-erechnung-check.vercel.app/">
+  <meta name="google-site-verification" content="kM9QiBhI1kFyyCB6lmAbWm0JtLeN4Z3wiHImmOe0xfE">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Shopify E-Rechnung & ZUGFeRD XML Prüfer (EN 16931)">
+  <meta property="og:description" content="Prüfen Sie XRechnung- und ZUGFeRD-XML-Dateien lokal im Browser auf EN 16931 Pflichtfelder, MwSt.-Rechnung und Stornoreferenzen.">
+  <meta property="og:url" content="https://belegvio-erechnung-check.vercel.app/">
+  <title>Shopify E-Rechnung &amp; ZUGFeRD XML Prüfer | Belegvio</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="checker.mjs"></script>
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="brand" href="./"><span class="brand-icon" aria-hidden="true">§</span> Belegvio E-Rechnung Prüfer</a>
+    <nav class="top-nav">
+      <a href="checkliste-2026">Checkliste 2026 &amp; DATEV</a>
+      <a href="#belegvio-app">Shopify App</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Shopify E-Rechnung &amp; ZUGFeRD XML Prüfer</h1>
+      <p>Prüfen Sie CII- (ZUGFeRD / Factur-X) und UBL-XML-Dateien (XRechnung) direkt im Browser auf EN 16931 Pflichtfelder, 19 %/7 % Steuerrechnung und Storno-Referenzen (TypeCode 381). Alle Daten bleiben lokal in diesem Tab.</p>
+      <p class="sublink"><a href="checkliste-2026">→ Shopify E-Rechnung Pflicht 2025/2026 &amp; DATEV EXTF Checkliste lesen</a></p>
+    </section>
+
+    <div class="sample-bar">
+      <label for="sample">Beispieldatei laden</label>
+      <select id="sample">
+        <option value="valid">Gültige ZUGFeRD B2B-Rechnung (380 · 19 % MwSt.)</option>
+        <option value="credit_missing">Stornorechnung (381) ohne Original-Referenz</option>
+        <option value="math_error">Rechenfehler Netto + MwSt. ≠ Brutto</option>
+      </select>
+      <button type="button" class="secondary" id="load-sample">Beispiel laden</button>
+    </div>
+
+    <div class="workspace">
+      <form id="xml-form" class="card">
+        <div class="card-head">
+          <h2>E-Rechnung XML einfügen oder wählen</h2>
+          <button type="reset" class="text-button">Leeren</button>
+        </div>
+        <div class="card-body">
+          <label class="file-label">XML-Datei lokal öffnen <input type="file" id="xml-file" accept=".xml,text/xml,application/xml"></label>
+          <label>XML-Inhalt (CII / ZUGFeRD oder UBL / XRechnung)
+            <textarea id="xml-input" rows="14" spellcheck="false" placeholder="Fügen Sie hier das XML Ihrer E-Rechnung ein (z. B. factur-x.xml oder xrechnung.xml)..."></textarea>
+          </label>
+          <div class="actions">
+            <button type="submit" class="primary">XML prüfen</button>
+          </div>
+          <p id="parse-error" class="error" hidden></p>
+        </div>
+      </form>
+
+      <section class="card" id="result-card" aria-labelledby="result-heading">
+        <div class="card-head dark-head">
+          <h2 id="result-heading">Prüfergebnis (EN 16931 Basis-Check)</h2>
+        </div>
+        <div id="empty" class="empty">
+          <h3>Bereit zur Prüfung</h3>
+          <p>Laden Sie ein Beispiel oder fügen Sie eine ZUGFeRD-/XRechnung-XML-Datei ein, um Pflichtfelder und Summen zu prüfen.</p>
+        </div>
+        <div id="report" class="card-body" hidden>
+          <div id="summary-box" class="outcome"></div>
+          <table class="check-table">
+            <thead><tr><th>Prüfpunkt</th><th>Status</th><th>Gefundener Wert</th></tr></thead>
+            <tbody id="check-rows"></tbody>
+          </table>
+          <p class="hint">Hinweis: Dieser Browser-Check ersetzt keine rechtsverbindliche KoSIT- oder Steuerberater-Prüfung, deckt aber die häufigsten Ablehnungsgründe bei deutschen B2B-E-Rechnungen und DATEV-Übergaben sofort auf.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="card cta-grid" id="belegvio-app">
+      <div class="card-head">
+        <h2>Automatisierte Shopify E-Rechnungen &amp; DATEV EXTF Prüfung</h2>
+      </div>
+      <div class="cta-columns">
+        <div class="cta-col">
+          <h3>Belegvio E-Rechnung (Shopify App)</h3>
+          <p>Automatische ZUGFeRD 2.3 (EN 16931) PDF/XML-Rechnungen, automatische Stornobelege (381) bei Rückerstattungen und DATEV EXTF Buchungsstapel (SKR03/SKR04) direkt aus Shopify. <strong>Free bis 20 Belege/Monat</strong>, Basic $9/Monat, Pro $19/Monat (7 Tage Test).</p>
+          <div class="actions">
+            <a class="primary cta-link" href="https://apps.shopify.com/belegvio-e-rechnung" target="_blank" rel="noopener noreferrer">Belegvio im Shopify App Store</a>
+            <a class="secondary cta-link" href="mailto:wadeelric34@gmail.com?subject=Belegvio%20Shopify%20E-Rechnung%20Zugang">Frühzugang / Demo anfragen</a>
+          </div>
+        </div>
+        <div class="cta-col">
+          <h3>Fester Einzel-Check für Ihren Shop — US$49</h3>
+          <p>Sie möchten vor der Umstellung 1 echte Shopify-Bestellung, 1 Teilerstattung (381) und den zugehörigen DATEV-EXTF-Export auf Konformität prüfen lassen? Festpreis-Bericht in 2 Werktagen – <strong>ohne Shop-Passwort</strong>.</p>
+          <div class="actions">
+            <a class="primary cta-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=star119055%40gmail.com&item_name=Shopify%20E-Rechnung%20and%20DATEV%20EXTF%20Check&amount=49.00&currency_code=USD" target="_blank" rel="noopener noreferrer">Einzel-Check buchen — US$49 (PayPal)</a>
+            <a class="secondary cta-link" href="mailto:wadeelric34@gmail.com?subject=Shopify%20E-Rechnung%20Einzel-Check">Anonymisierte XML senden</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap site-footer">
+    <p>Unabhängiges Prüftool für deutsche Shopify-Händler (EN 16931 / ZUGFeRD / XRechnung / DATEV EXTF).</p>
+    <nav>
+      <a href="checkliste-2026">Checkliste 2026</a>
+      <a href="https://gmc-shipping-check.vercel.app/">GMC Shipping Check</a>
+      <a href="https://shopify-purchase-event-check.vercel.app/">Purchase Event Check</a>
+    </nav>
+  </footer>
+</body>
+</html>
