@@ -7,14 +7,14 @@ Free, zero-backend, browser-local diagnostic tools for Shopify merchants, PPC/Sh
 ### 1. Google Merchant Center Shipping Currency Mismatch Checker
 - **Live Tool:** https://gmc-shipping-check.vercel.app/
 - **Fix Guide:** https://gmc-shipping-check.vercel.app/guide
-- **Fiverr Escrow Audit ($50):** https://www.fiverr.com/star119055gmail/fix-shopify-google-merchant-center-shipping-currency-mismatch
+- **Fiverr Escrow Audit ($20 intro):** https://www.fiverr.com/star119055gmail/fix-shopify-google-merchant-center-shipping-currency-mismatch
 - **Solves:** *"Mismatched currency in shipping information"* disapprovals on Shopify Markets / multi-currency stores. Compares offer-level vs. account-level Merchant Center shipping currency against live Shopify checkout conditions and generates a local evidence report.
 
 ### 2. Shopify GA4 & Google Ads Purchase Event Checker
 - **Live Tool:** https://shopify-purchase-event-check.vercel.app/
 - **Wrong Ads Action Guide:** https://shopify-purchase-event-check.vercel.app/guide
 - **Checkout Migration Guide:** https://shopify-purchase-event-check.vercel.app/additional-scripts-deprecated
-- **Fiverr Escrow Audit ($50):** https://www.fiverr.com/star119055gmail/audit-and-fix-shopify-ga4-and-google-ads-purchase-tracking
+- **Fiverr Escrow Audit ($20 intro):** https://www.fiverr.com/star119055gmail/audit-and-fix-shopify-ga4-and-google-ads-purchase-tracking
 - **Solves:** Missing, duplicated, or misrouted (`send_to` mismatch) Google Ads and GA4 `purchase` events after Shopify deprecated Thank You page Additional Scripts in favor of Customer Events / Custom Pixels (`checkout_completed`).
 
 ### 3. German Shopify E-Rechnung (ZUGFeRD / XRechnung EN 16931) XML Validator
