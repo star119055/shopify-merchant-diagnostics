@@ -20,6 +20,7 @@ Free, zero-backend, browser-local diagnostic tools for Shopify merchants, PPC/Sh
 ### 3. German Shopify E-Rechnung (ZUGFeRD / XRechnung EN 16931) XML Validator
 - **Live Tool:** https://belegvio-erechnung-check.vercel.app/
 - **2026 Compliance & DATEV EXTF Checklist:** https://belegvio-erechnung-check.vercel.app/checkliste-2026
+- **Fiverr Escrow Audit ($20 intro):** https://www.fiverr.com/star119055gmail/audit-german-shopify-e-rechnung-zugferd-xrechnung-and-datev-extf
 - **Solves:** Client-side EN 16931 check for CII (ZUGFeRD / Factur-X) and UBL (XRechnung) XML invoices — validates BT-1, BT-2, BT-3 (`380`/`381`), BT-5 currency, Seller VAT ID, net+tax=gross arithmetic, and TypeCode `381` credit note references (`InvoiceReferencedDocument` / BT-25) for German GoBD & DATEV EXTF workflows.
 - **Automated Shopify App:** [Belegvio E-Rechnung](https://apps.shopify.com/belegvio-e-rechnung) (ZUGFeRD 2.3 PDF/XML + automated `381` refund credit notes + DATEV EXTF export).
 
